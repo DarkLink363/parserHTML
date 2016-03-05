@@ -7,13 +7,31 @@ class ParserHTML{
 	private $functions;
 	public 	$tags;
 	
-	public function __construct($page = null, $arg = null){
+	public function __construct($page = null, $arg = null, $arg2 = null){
 		$this->PATH = dirname(__FILE__);
 		$thus->HTML = null;
 		$tags = new stdClass();
 		if($page !== null){
 			if(file_exists($this->PATH . $page)){
 				$this->SITE = $page;
+				//args
+					if($arg !== null){
+						$args;
+						$arg = strtolower($arg);
+						if(strpos($arg, ';') !== false){
+							$args = explode(';', $arg);
+						}else{
+							$args[0] = $arg;
+						}
+						if(in_array('autovars', $args)){
+							if($arg2 !== null){
+								$this->vars_AUTO($arg2);
+							}else{
+								throw new Exception('Bad use of argument: AUTOVARS');
+							}
+						}
+					}
+				//end of args
 			}else{
 				throw new Exception('Site to parse not found.');
 			}
@@ -27,6 +45,18 @@ class ParserHTML{
 			$this->variables[] = array('{'.$before.'}',$after);
 		}else{
 			throw new Exception('Bad method to add variable.');
+		}
+	}
+	
+	public function vars_AUTO($zmienne = null){
+		if($zmienne !== null){
+			foreach($zmienne as $name=>$value){
+				if(strtoupper(substr($name,0,2)) == 'P_'){
+					$this->vars_ADD(strtoupper($name),$value);
+				}
+			}
+		}else{
+			throw new Exception('Bad method to add auto variables.');
 		}
 	}
 	
