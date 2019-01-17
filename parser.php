@@ -9,7 +9,7 @@ class ParserHTML{
 	
 	public function __construct($page = null, $arg = null, $arg2 = null){
 		$this->PATH = dirname(__FILE__);
-		$thus->HTML = null;
+		$this->HTML = null;
 		$tags = new stdClass();
 		if($page !== null){
 			if(file_exists($this->PATH . $page)){
